@@ -1,0 +1,36 @@
+{
+  "name": "hasegawa-tomoki/php-terminal-nes-emulator",
+  "description": "A PHP terminal NES emulator",
+  "keywords": ["php", "terminal", "console", "nes", "emulator"],
+  "homepage": "http://github.com/hasegawa-tomoki/php-terminal-nes-emulator",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "HASEGAWA Tomoki",
+      "email": "hasegawa.tomoki@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "pear/console_commandline": "^1.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7|^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Nes\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Nes\\Test\\": "tests"
+    }
+  },
+  "scripts": {
+    "cs-check": "phpcs --colors -p --standard=PSR2 ./src ./tests",
+    "cs-fix": "phpcbf --colors --standard=PSR2 ./src ./tests",
+    "test": "phpunit --colors=always"
+  },
+  "prefer-stable": true
+}
