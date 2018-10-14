@@ -198,17 +198,17 @@ class Cpu
         $this->hasBranched = false;
         switch ($baseName) {
             case 'LDA':
-                $this->registers->a = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $this->registers->a = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $this->registers->p->negative = !!($this->registers->a & 0x80);
                 $this->registers->p->zero = !$this->registers->a;
                 break;
             case 'LDX':
-                $this->registers->x = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $this->registers->x = ($mode == Addressing::Immediate ? $addrOrData : $this->read($addrOrData);
                 $this->registers->p->negative = !!($this->registers->x & 0x80);
                 $this->registers->p->zero = !$this->registers->x;
                 break;
             case 'LDY':
-                $this->registers->y = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $this->registers->y = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $this->registers->p->negative = !!($this->registers->y & 0x80);
                 $this->registers->p->zero = !$this->registers->y;
                 break;
@@ -250,7 +250,7 @@ class Cpu
                 $this->registers->p->zero = !$this->registers->a;
                 break;
             case 'ADC':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $operated = $data + $this->registers->a + $this->registers->p->carry;
                 $overflow = (!((($this->registers->a ^ $data) & 0x80) != 0) &&
                     ((($this->registers->a ^ $operated) & 0x80)) != 0);
@@ -261,14 +261,14 @@ class Cpu
                 $this->registers->a = $operated & 0xFF;
                 break;
             case 'AND':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $operated = $data & $this->registers->a;
                 $this->registers->p->negative = !!($operated & 0x80);
                 $this->registers->p->zero = !$operated;
                 $this->registers->a = $operated & 0xFF;
                 break;
             case 'ASL':
-                if ($mode == 'accumulator') {
+                if ($mode == Addressing::Accumulator) {
                     $acc = $this->registers->a;
                     $this->registers->p->carry = !!($acc & 0x80);
                     $this->registers->a = ($acc << 1) & 0xFF;
@@ -290,21 +290,21 @@ class Cpu
                 $this->registers->p->zero = !($this->registers->a & $data);
                 break;
             case 'CMP':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $compared = $this->registers->a - $data;
                 $this->registers->p->carry = $compared >= 0;
                 $this->registers->p->negative = !!($compared & 0x80);
                 $this->registers->p->zero = !($compared & 0xff);
                 break;
             case 'CPX':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $compared = $this->registers->x - $data;
                 $this->registers->p->carry = $compared >= 0;
                 $this->registers->p->negative = !!($compared & 0x80);
                 $this->registers->p->zero = !($compared & 0xff);
                 break;
             case 'CPY':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $compared = $this->registers->y - $data;
                 $this->registers->p->carry = $compared >= 0;
                 $this->registers->p->negative = !!($compared & 0x80);
@@ -327,7 +327,7 @@ class Cpu
                 $this->registers->p->zero = !$this->registers->y;
                 break;
             case 'EOR':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $operated = $data ^ $this->registers->a;
                 $this->registers->p->negative = !!($operated & 0x80);
                 $this->registers->p->zero = !$operated;
@@ -350,7 +350,7 @@ class Cpu
                 $this->registers->p->zero = !$this->registers->y;
                 break;
             case 'LSR':
-                if ($mode == 'accumulator') {
+                if ($mode == Addressing::Accumulator) {
                     $acc = $this->registers->a & 0xFF;
                     $this->registers->p->carry = !!($acc & 0x01);
                     $this->registers->a = $acc >> 1;
@@ -364,14 +364,14 @@ class Cpu
                 $this->registers->p->negative = false;
                 break;
             case 'ORA':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $operated = $data | $this->registers->a;
                 $this->registers->p->negative = !!($operated & 0x80);
                 $this->registers->p->zero = !$operated;
                 $this->registers->a = $operated & 0xFF;
                 break;
             case 'ROL':
-                if ($mode == 'accumulator') {
+                if ($mode == Addressing::Accumulator) {
                     $acc = $this->registers->a;
                     $this->registers->a = ($acc << 1) & 0xFF | ($this->registers->p->carry ? 0x01 : 0x00);
                     $this->registers->p->carry = !!($acc & 0x80);
@@ -387,7 +387,7 @@ class Cpu
                 }
                 break;
             case 'ROR':
-                if ($mode == 'accumulator') {
+                if ($mode == Addressing::Accumulator) {
                     $acc = $this->registers->a;
                     $this->registers->a = $acc >> 1 | ($this->registers->p->carry ? 0x80 : 0x00);
                     $this->registers->p->carry = !!($acc & 0x01);
@@ -403,7 +403,7 @@ class Cpu
                 }
                 break;
             case 'SBC':
-                $data = ($mode == 'immediate') ? $addrOrData : $this->read($addrOrData);
+                $data = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $operated = $this->registers->a - $data - ($this->registers->p->carry ? 0 : 1);
                 $overflow = ((($this->registers->a ^ $operated) & 0x80) != 0 &&
                     (($this->registers->a ^ $data) & 0x80) != 0);
