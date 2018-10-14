@@ -1,5 +1,7 @@
 A NES emulator written in PHP
 
+![demo](https://github.com/hasegawa-tomoki/php-terminal-nes-emulator/blob/master/demo.gif)
+
 Based on [bokuweb/flownes](https://github.com/bokuweb/flownes), [gabrielrcouto/php-terminal-gameboy-emulator](https://github.com/gabrielrcouto/php-terminal-gameboy-emulator).
 
 # Requirements
@@ -22,9 +24,11 @@ You can see beautiful screenshots in `./screen` directory.
 
 # Controls
 
-|A|B|SELECT|START|Up|Down|Left|Right|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|.|,|N|M|W|S|A|D|
+```
+  [W]
+[A] [F]        [,] [.]
+  [D]   [N] [M]
+```
 
 # License
 
