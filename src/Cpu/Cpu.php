@@ -40,7 +40,8 @@ class Cpu
     public function reset()
     {
         $this->registers = Registers::getDefault();
-        $this->registers->pc = $this->read(0xFFFC, "Word") or 0x8000;
+        // TODO: flownes set 0x8000 to PC when read(0xfffc) fails.
+        $this->registers->pc = $this->read(0xFFFC, "Word");
         printf("Initial pc: %04x\n", $this->registers->pc);
     }
 

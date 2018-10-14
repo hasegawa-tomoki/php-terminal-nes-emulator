@@ -28,10 +28,6 @@ class CpuBus
             return $this->ram->read($addr);
         } elseif ($addr < 0x2000) {
             // mirror
-            if (is_null(($this->ram->read($addr - 0x0800)))) {
-                printf("Original: %04x   Redirected: %04x\n", $addr, $addr - 0x0800);
-                Debugger::dump($this->ram->ram);
-            }
             return $this->ram->read($addr - 0x0800);
         } elseif ($addr < 0x4000) {
             // mirror
@@ -50,7 +46,7 @@ class CpuBus
             // ROM
             return $this->programRom->read($addr - 0x8000);
         }
-        return 0;
+        return false;
     }
 
     public function writeByCpu(int $addr, int $data)
@@ -72,7 +68,7 @@ class CpuBus
                 $this->keypad->write($data);
             } else {
                 // APU
-                return;
+                return false;
             }
         }
     }
