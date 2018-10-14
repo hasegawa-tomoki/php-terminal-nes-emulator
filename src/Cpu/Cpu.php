@@ -642,8 +642,6 @@ class Cpu
             $this->processIrq();
         }
         $opcode = $this->fetch($this->registers->pc, 'Byte');
-        //printf("pc: 0x%04x  data: 0x%02x\n", $this->registers->pc, $opcode);
-        //if (!isset($this->opCodeList[$opcode])) { $this->debug($opcode); }
         $ocp = $this->opCodeList[$opcode];
         $data = $this->getAddrOrDataWithAdditionalCycle($ocp->mode);
         $this->execInstruction($ocp->baseName, $data->addrOrData, $ocp->mode);
