@@ -203,7 +203,7 @@ class Cpu
                 $this->registers->p->zero = !$this->registers->a;
                 break;
             case 'LDX':
-                $this->registers->x = ($mode == Addressing::Immediate ? $addrOrData : $this->read($addrOrData);
+                $this->registers->x = ($mode == Addressing::Immediate) ? $addrOrData : $this->read($addrOrData);
                 $this->registers->p->negative = !!($this->registers->x & 0x80);
                 $this->registers->p->zero = !$this->registers->x;
                 break;
