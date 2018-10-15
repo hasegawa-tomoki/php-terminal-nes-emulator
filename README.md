@@ -7,8 +7,19 @@ Based on [bokuweb/flownes](https://github.com/bokuweb/flownes), [gabrielrcouto/p
 # Requirements
 
 * PHP >= 7.0
+* Composer
 
-# Running
+# Install
+
+```
+$ git clone https://github.com/hasegawa-tomoki/php-terminal-nes-emulator.git
+$ cd php-terminal-nes-emulator
+$ composer install
+```
+
+[No composer?](https://getcomposer.org/doc/00-intro.md#locally)
+
+# Run
 
 ```
 $ php boot.php romfile.nes
