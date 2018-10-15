@@ -1,4 +1,4 @@
-A NES emulator written in PHP
+An NES emulator written in PHP
 
 ![demo](https://github.com/hasegawa-tomoki/php-terminal-nes-emulator/blob/master/demo.gif)
 
