@@ -25,6 +25,8 @@ $ composer install
 $ php boot.php romfile.nes
 ```
 
+Compatible with mapper 0 rom files.
+
 If you want to see colorful pictures, run with '-cpng' option.
 
 ```
