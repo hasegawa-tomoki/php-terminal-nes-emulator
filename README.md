@@ -4,6 +4,8 @@ An NES emulator written in PHP
 
 Based on [bokuweb/flownes](https://github.com/bokuweb/flownes), [gabrielrcouto/php-terminal-gameboy-emulator](https://github.com/gabrielrcouto/php-terminal-gameboy-emulator).
 
+Blog entry: https://www.hasegawa-tomoki.com/blog/2018/10/16/php-terminal-nes-emulator/ (Japanese)
+
 # Requirements
 
 * PHP >= 7.0
