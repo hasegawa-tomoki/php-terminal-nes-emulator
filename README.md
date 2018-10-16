@@ -32,7 +32,7 @@ Compatible with mapper 0 rom files.
 If you want to see colorful pictures, run with '-cpng' option.
 
 ```
-$ php boot.php some.nes -cPng
+$ php boot.php some.nes -cpng
 ```
 
 You can see beautiful screenshots in `./screen` directory.
