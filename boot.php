@@ -40,7 +40,7 @@ try {
 $nes = new \Nes\Nes($canvas);
 try {
     $nes->load($filename);
+    $nes->start();
 } catch (Exception $e) {
     echo $e->getMessage();
 }
-$nes->start();
