@@ -24,7 +24,7 @@ $ composer install
 # Run
 
 ```
-$ php boot.php romfile.nes
+$ php boot.php your-rom-file.nes
 ```
 
 Compatible with mapper 0 rom files.
