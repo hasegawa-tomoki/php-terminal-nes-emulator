@@ -10,6 +10,7 @@ Blog entry: https://www.hasegawa-tomoki.com/blog/2018/10/16/php-terminal-nes-emu
 
 * PHP >= 7.0
 * Composer
+* NES rom
 
 # Install
 
