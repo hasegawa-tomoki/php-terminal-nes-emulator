@@ -42,8 +42,8 @@ You can see beautiful screenshots in `./screen` directory.
 
 ```
   [W]
-[A] [F]        [,] [.]
-  [D]   [N] [M]
+[A] [D]        [,] [.]
+  [S]   [N] [M]
 ```
 
 # Credit
