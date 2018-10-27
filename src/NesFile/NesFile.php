@@ -38,18 +38,18 @@ class NesFile
 
         $nesRom = new NesRom(
             $isHorizontalMirror,
-            array_slice($nes, self::NES_HEADER_SIZE, ($characterRomStart - 1) - self::NES_HEADER_SIZE),
-            array_slice($nes, $characterRomStart, ($characterRomEnd - 1) - $characterRomStart)
+            array_slice($nes, self::NES_HEADER_SIZE, $characterRomStart - self::NES_HEADER_SIZE),
+            array_slice($nes, $characterRomStart, $characterRomEnd - $characterRomStart)
         );
 
         printf(
             "Program   ROM: 0x0000 - 0x%s (%d bytes)\n",
-            dechex(count($nesRom->programRom)),
+            dechex(count($nesRom->programRom) - 1),
             count($nesRom->programRom)
         );
         printf(
             "Character ROM: 0x0000 - 0x%s (%d bytes)\n",
-            dechex(count($nesRom->characterRom)),
+            dechex(count($nesRom->characterRom) - 1),
             count($nesRom->characterRom)
         );
         return $nesRom;
