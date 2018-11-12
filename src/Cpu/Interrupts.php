@@ -30,11 +30,11 @@ class Interrupts
 
     public function assertIrq()
     {
-        $this->nmi = true;
+        $this->irq = true;
     }
 
     public function deassertIrq()
     {
-        $this->nmi = false;
+        $this->irq = false;
     }
 }
