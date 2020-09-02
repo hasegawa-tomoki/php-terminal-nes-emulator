@@ -110,7 +110,7 @@ class Cpu
                 return new AddrOrDataAndAdditionalCycle($addr & 0xFFFF, 0);
             default:
                 echo($mode);
-                throw new \Exception(`Unknown addressing $mode detected.`);
+                throw new \Exception("Unknown addressing $mode detected.");
         }
     }
 
