@@ -43,11 +43,12 @@ class Renderer
 
     public function shouldPixelHide(int $x, int $y): bool
     {
-        $tileX = ~~($x / 8);
-        $tileY = ~~($y / 8);
+        $tileX = floor($x / 8);
+        $tileY = floor($y / 8);
         $backgroundIndex = $tileY * 33 + $tileX;
-        $sprite = $this->background[$backgroundIndex] && $this->background[$backgroundIndex]->pattern;
-        if (! $sprite) {
+        if (isset($this->background[$backgroundIndex])){
+            $sprite = $this->background[$backgroundIndex]->pattern;
+        } else {
             return true;
         }
         // NOTE: If background pixel is not transparent, we need to hide sprite.
@@ -71,7 +72,7 @@ class Renderer
         $this->background = $background;
         for ($i = 0; $i < count($background); $i += 1 | 0) {
             $x = ($i % 33) * 8;
-            $y = ~~($i / 33) * 8;
+            $y = floor($i / 33) * 8;
             $this->renderTile($background[$i], $x, $y, $palette);
         }
     }
