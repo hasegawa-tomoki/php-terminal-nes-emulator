@@ -187,17 +187,17 @@ class Ppu
           |            |            |
           +------------+------------+
         */
-        return ~~(($this->scrollX + (($this->nameTableId() % 2) * 256)) / 8);
+        return floor(($this->scrollX + (($this->nameTableId() % 2) * 256)) / 8);
     }
 
     public function scrollTileY(): int
     {
-        return ~~(($this->scrollY + (~~($this->nameTableId() / 2) * 240)) / 8);
+        return floor(($this->scrollY + (floor($this->nameTableId() / 2) * 240)) / 8);
     }
 
     public function tileY(): int
     {
-        return ~~($this->line / 8) + $this->scrollTileY();
+        return floor($this->line / 8) + $this->scrollTileY();
     }
 
     public function backgroundTableOffset(): int
@@ -222,12 +222,12 @@ class Ppu
 
     public function getBlockId(int $tileX, int $tileY): int
     {
-        return ~~(($tileX % 4) / 2) + (~~(($tileY % 4) / 2)) * 2;
+        return floor(($tileX % 4) / 2) + (floor(($tileY % 4) / 2)) * 2;
     }
 
     public function getAttribute(int $tileX, int $tileY, int $offset): int
     {
-        $addr = ~~($tileX / 4) + (~~($tileY / 4) * 8) + 0x03C0 + $offset;
+        $addr = floor($tileX / 4) + (floor($tileY / 4) * 8) + 0x03C0 + $offset;
         return $this->vram->read($this->mirrorDownSpriteAddr($addr));
     }
 
@@ -321,13 +321,13 @@ class Ppu
         // while values of 240 to 255 are treated as -16 through -1 in a way, but tile data is incorrectly
         // fetched from the attribute table.
         $clampedTileY = $this->tileY() % 30;
-        $tableIdOffset = (~~($this->tileY() / 30) % 2) ? 2 : 0;
+        $tableIdOffset = (floor($this->tileY() / 30) % 2) ? 2 : 0;
         // background of a line.
         // Build viewport + 1 tile for background scroll.
         for ($x = 0; $x < 32 + 1; $x = ($x + 1) | 0) {
             $tileX = ($x + $this->scrollTileX());
             $clampedTileX = $tileX % 32;
-            $nameTableId = (~~($tileX / 32) % 2) + $tableIdOffset;
+            $nameTableId = (floor($tileX / 32) % 2) + $tableIdOffset;
             $offsetAddrByNameTable = $nameTableId * 0x400;
             $tile = $this->buildTile($clampedTileX, $clampedTileY, $offsetAddrByNameTable);
             $this->background[] = $tile;
@@ -359,7 +359,7 @@ class Ppu
                 $addr = $spriteId * 16 + $i + $offset;
                 $ram = $this->readCharacterRAM($addr);
                 if ($ram & (0x80 >> $j)) {
-                    $sprite[$i % 8][$j] += 0x01 << ~~($i / 8);
+                    $sprite[$i % 8][$j] += 0x01 << floor($i / 8);
                 }
             }
         }
