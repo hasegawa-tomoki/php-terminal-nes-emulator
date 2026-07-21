@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "ee77da1b73f491cd0f8f73a05403c693",
     "packages": [
         {
             "name": "pear/console_commandline",
-            "version": "v1.2.2",
+            "version": "v1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pear/Console_CommandLine.git",
-                "reference": "7a8afa50bdc8dbfdc0cf394f1101106e8b8f8e67"
+                "reference": "611c5bff2e47ec5a184748cb5fedc2869098ff28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/Console_CommandLine/zipball/7a8afa50bdc8dbfdc0cf394f1101106e8b8f8e67",
-                "reference": "7a8afa50bdc8dbfdc0cf394f1101106e8b8f8e67",
+                "url": "https://api.github.com/repos/pear/Console_CommandLine/zipball/611c5bff2e47ec5a184748cb5fedc2869098ff28",
+                "reference": "611c5bff2e47ec5a184748cb5fedc2869098ff28",
                 "shasum": ""
             },
             "require": {
@@ -33,7 +33,10 @@
             "autoload": {
                 "psr-0": {
                     "Console": "./"
-                }
+                },
+                "exclude-from-classmap": [
+                    "tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "include-path": [
@@ -45,7 +48,7 @@
             "authors": [
                 {
                     "name": "Richard Quadling",
-                    "email": "RQuadling@GMail.com"
+                    "email": "rquadling@gmail.com"
                 },
                 {
                     "name": "David Jean Louis",
@@ -57,7 +60,12 @@
             "keywords": [
                 "console"
             ],
-            "time": "2016-07-14T06:00:57+00:00"
+            "support": {
+                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Console_CommandLine",
+                "source": "https://github.com/pear/Console_CommandLine"
+            },
+            "abandoned": true,
+            "time": "2023-04-02T18:49:53+00:00"
         },
         {
             "name": "pear/pear_exception",
@@ -1585,5 +1593,6 @@
     "platform": {
         "php": ">=7.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }

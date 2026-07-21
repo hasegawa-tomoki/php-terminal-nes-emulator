@@ -121,7 +121,7 @@ class Cpu
         return $this->read($addr, $size);
     }
 
-    public function read(int $addr, string $size = null): int
+    public function read(int $addr, ?string $size = null): int
     {
         $addr &= 0xFFFF;
 
