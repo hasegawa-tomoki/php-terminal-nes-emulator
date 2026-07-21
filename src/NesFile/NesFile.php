@@ -38,6 +38,7 @@ class NesFile
 
         $nesRom = new NesRom(
             $isHorizontalMirror,
+            $mapper,
             array_slice($nes, self::NES_HEADER_SIZE, $characterRomStart - self::NES_HEADER_SIZE),
             array_slice($nes, $characterRomStart, $characterRomEnd - $characterRomStart)
         );

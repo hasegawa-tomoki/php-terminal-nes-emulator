@@ -9,6 +9,11 @@ class Ppu
 {
     const SPRITES_NUMBER = 0x100;
 
+    const MIRROR_SINGLE_LOWER = 0;
+    const MIRROR_SINGLE_UPPER = 1;
+    const MIRROR_VERTICAL = 2;
+    const MIRROR_HORIZONTAL = 3;
+
     // PPU power up state
     // see. https://wiki.nesdev.com/w/index.php/PPU_power_up_state
     //
@@ -101,8 +106,8 @@ class Ppu
     public $scrollX;
     /** @var int */
     public $scrollY;
-    /** @var bool */
-    public $isHorizontalMirror;
+    /** @var int self::MIRROR_* */
+    public $mirroring;
 
     public function __construct(PpuBus $bus, Interrupts $interrupts, bool $isHorizontalMirror)
     {
@@ -121,7 +126,7 @@ class Ppu
         $this->sprites = [];
         $this->bus = $bus;
         $this->interrupts = $interrupts;
-        $this->isHorizontalMirror = $isHorizontalMirror;
+        $this->mirroring = $isHorizontalMirror ? self::MIRROR_HORIZONTAL : self::MIRROR_VERTICAL;
         $this->scrollX = 0;
         $this->scrollY = 0;
         $this->palette = new Palette();
@@ -238,15 +243,30 @@ class Ppu
         return $this->vram->read($spriteAddr);
     }
 
+    public function setMirroring(int $mirroring)
+    {
+        $this->mirroring = $mirroring;
+    }
+
     public function mirrorDownSpriteAddr(int $addr): int
     {
-        if (! $this->isHorizontalMirror) {
+        if ($addr >= 0x1000) {
             return $addr;
         }
-        if ($addr >= 0x0400 and $addr < 0x0800 or $addr >= 0x0C00) {
-            return $addr - 0x400;
+        switch ($this->mirroring) {
+            case self::MIRROR_SINGLE_LOWER:
+                return $addr & 0x3FF;
+            case self::MIRROR_SINGLE_UPPER:
+                return ($addr & 0x3FF) | 0x400;
+            case self::MIRROR_VERTICAL:
+                return $addr & 0x7FF;
+            case self::MIRROR_HORIZONTAL:
+            default:
+                if ($addr >= 0x0400 and $addr < 0x0800 or $addr >= 0x0C00) {
+                    return $addr - 0x400;
+                }
+                return $addr;
         }
-        return $addr;
     }
 
     // The PPU draws one line at 341 clocks and prepares for the next line.
@@ -385,7 +405,7 @@ class Ppu
             if ($addr >= 0x3F00) {
                 return $this->vram->read($addr);
             }
-            $this->vramReadBuf = $this->vram->read($addr);
+            $this->vramReadBuf = $this->vram->read($this->mirrorDownSpriteAddr($addr));
         } else {
             $this->vramReadBuf = $this->readCharacterRAM($this->vramAddr);
             $this->vramAddr += $this->vramOffset();
@@ -490,7 +510,7 @@ class Ppu
             if ($this->vramAddr >= 0x3f00 && $this->vramAddr < 0x4000) {
                 $this->palette->write($this->vramAddr - 0x3f00, $data);
             } else {
-                $this->writeVram($this->calcVramAddr(), $data);
+                $this->writeVram($this->mirrorDownSpriteAddr($this->calcVramAddr()), $data);
             }
         } else {
             $this->writeCharacterRAM($this->vramAddr, $data);

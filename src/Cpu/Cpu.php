@@ -670,21 +670,10 @@ class Cpu
                     if ($this->registers->pc === 0x4016) {
                         printf("Keypad\n");
                     } else {
-                        if ($this->registers->pc >= 0xC000) {
-                            if ($this->bus->programRom->size() <= 0x4000) {
-                                printf("Redirect program rom: %04x\n", $this->registers->pc - 0xC000);
-                                Debugger::dump($this->bus->programRom->rom);
-                            } else {
-                                printf("Redirect program rom: %04x\n", $this->registers->pc - 0x8000);
-                                Debugger::dump($this->bus->programRom->rom);
-                            }
+                        if ($this->registers->pc >= 0x8000) {
+                            printf("Program rom: %04x\n", $this->registers->pc);
                         } else {
-                            if ($this->registers->pc >= 0x8000) {
-                                printf("Redirect program rom: %04x\n", $this->registers->pc - 0x8000);
-                                Debugger::dump($this->bus->programRom->rom);
-                            } else {
-                                printf("Something wrong...\n");
-                            }
+                            printf("Something wrong...\n");
                         }
                     }
                 }

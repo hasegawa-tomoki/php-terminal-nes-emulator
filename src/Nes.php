@@ -4,11 +4,12 @@ namespace Nes;
 use Nes\Bus\CpuBus;
 use Nes\Bus\PpuBus;
 use Nes\Bus\Ram;
-use Nes\Bus\Rom;
 use Nes\Cpu\Cpu;
 use Nes\Cpu\Dma;
 use Nes\Cpu\Interrupts;
 use Nes\Bus\Keypad;
+use Nes\Mapper\Mapper0;
+use Nes\Mapper\Mapper1;
 use Nes\NesFile\NesFile;
 use Nes\Ppu\Canvas\CanvasInterface;
 use Nes\Ppu\Ppu;
@@ -22,10 +23,8 @@ class Nes
     public $ppu;
     /** @var \Nes\Bus\CpuBus */
     public $cpuBus;
-    /** @var \Nes\Bus\Ram */
-    public $characterMem;
-    /** @var \Nes\Bus\Rom */
-    public $programRom;
+    /** @var \Nes\Mapper\MapperInterface */
+    public $mapper;
     /** @var \Nes\Bus\Ram */
     public $ram;
     /** @var \Nes\Bus\PpuBus */
@@ -78,18 +77,24 @@ class Nes
 
         $this->keypad = new Keypad();
         $this->ram = new Ram(2048);
-        $this->characterMem = new Ram(0x4000);
-        for ($i = 0; $i < count($nesRom->characterRom); $i++) {
-            $this->characterMem->write($i, $nesRom->characterRom[$i]);
+        switch ($nesRom->mapper) {
+            case 0:
+                $this->mapper = new Mapper0($nesRom);
+                break;
+            case 1:
+                $this->mapper = new Mapper1($nesRom);
+                break;
+            default:
+                throw new \RuntimeException(sprintf('Unsupported mapper: %d', $nesRom->mapper));
         }
-        $this->programRom = new Rom($nesRom->programRom);
-        $this->ppuBus = new PpuBus($this->characterMem);
+        $this->ppuBus = new PpuBus($this->mapper);
         $this->interrupts = new Interrupts();
         $this->ppu = new Ppu($this->ppuBus, $this->interrupts, $nesRom->isHorizontalMirror);
+        $this->mapper->setPpu($this->ppu);
         $this->dma = new Dma($this->ram, $this->ppu);
         $this->cpuBus = new CpuBus(
             $this->ram,
-            $this->programRom,
+            $this->mapper,
             $this->ppu,
             $this->keypad,
             $this->dma

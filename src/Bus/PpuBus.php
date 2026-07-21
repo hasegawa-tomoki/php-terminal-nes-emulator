@@ -1,23 +1,25 @@
 <?php
 namespace Nes\Bus;
 
+use Nes\Mapper\MapperInterface;
+
 class PpuBus
 {
-    /** @var \Nes\Bus\Ram */
-    public $characterRam;
+    /** @var \Nes\Mapper\MapperInterface */
+    public $mapper;
 
-    public function __construct(Ram $characterRam)
+    public function __construct(MapperInterface $mapper)
     {
-        $this->characterRam = $characterRam;
+        $this->mapper = $mapper;
     }
 
     public function readByPpu(int $addr): int
     {
-        return $this->characterRam->read($addr);
+        return $this->mapper->readChr($addr);
     }
 
     public function writeByPpu(int $addr, int $data)
     {
-        $this->characterRam->write($addr, $data);
+        $this->mapper->writeChr($addr, $data);
     }
 }

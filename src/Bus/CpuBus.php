@@ -3,20 +3,21 @@ namespace Nes\Bus;
 
 use Nes\Cpu\Dma;
 use Nes\Debugger;
+use Nes\Mapper\MapperInterface;
 use Nes\Ppu\Ppu;
 
 class CpuBus
 {
     public $ram;
-    public $programRom;
+    public $mapper;
     public $ppu;
     public $keypad;
     public $dma;
 
-    public function __construct(Ram $ram, Rom $programRom, Ppu $ppu, Keypad $keypad, Dma $dma)
+    public function __construct(Ram $ram, MapperInterface $mapper, Ppu $ppu, Keypad $keypad, Dma $dma)
     {
         $this->ram = $ram;
-        $this->programRom = $programRom;
+        $this->mapper = $mapper;
         $this->ppu = $ppu;
         $this->keypad = $keypad;
         $this->dma = $dma;
@@ -36,15 +37,12 @@ class CpuBus
         } elseif ($addr === 0x4016) {
             // TODO Add 2P
             return $this->keypad->read();
-        } elseif ($addr >= 0xC000) {
-            // Mirror, if prom block number equals 1
-            if ($this->programRom->size() <= 0x4000) {
-                return $this->programRom->read($addr - 0xC000);
-            }
-            return $this->programRom->read($addr - 0x8000);
         } elseif ($addr >= 0x8000) {
             // ROM
-            return $this->programRom->read($addr - 0x8000);
+            return $this->mapper->readPrg($addr);
+        } elseif ($addr >= 0x6000) {
+            // battery backup RAM
+            return $this->mapper->readPrgRam($addr);
         }
         return false;
     }
@@ -70,6 +68,12 @@ class CpuBus
                 // APU
                 return false;
             }
+        } elseif ($addr >= 0x6000 && $addr < 0x8000) {
+            // battery backup RAM
+            $this->mapper->writePrgRam($addr, $data);
+        } elseif ($addr >= 0x8000) {
+            // mapper register
+            $this->mapper->writePrg($addr, $data);
         }
     }
 }
