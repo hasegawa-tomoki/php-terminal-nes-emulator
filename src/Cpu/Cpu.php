@@ -172,8 +172,10 @@ class Cpu
         $status = $this->pop();
         $this->registers->p->negative = !!($status & 0x80);
         $this->registers->p->overflow = !!($status & 0x40);
-        $this->registers->p->reserved = !!($status & 0x20);
-        $this->registers->p->break_mode = !!($status & 0x10);
+        // Bits 4-5 don't exist in the status register itself: bit 5 always
+        // reads back as 1, and the break flag only exists on pushed copies.
+        $this->registers->p->reserved = true;
+        $this->registers->p->break_mode = false;
         $this->registers->p->decimal_mode = !!($status & 0x08);
         $this->registers->p->interrupt = !!($status & 0x04);
         $this->registers->p->zero = !!($status & 0x02);
@@ -419,6 +421,7 @@ class Cpu
             case 'PHP':
                 $this->registers->p->break_mode = true;
                 $this->pushStatus();
+                $this->registers->p->break_mode = false;
                 break;
             case 'PLA':
                 $this->registers->a = $this->pop();
@@ -515,6 +518,7 @@ class Cpu
                 $this->push($this->registers->pc & 0xFF);
                 $this->registers->p->break_mode = true;
                 $this->pushStatus();
+                $this->registers->p->break_mode = false;
                 $this->registers->p->interrupt = true;
                 // Ignore interrupt when already set.
                 if (!$interrupt) {
@@ -568,8 +572,9 @@ class Cpu
                 $this->write($addrOrData, $data);
                 break;
             case 'RLA':
-                $data = ($this->read($addrOrData) << 1) + $this->registers->p->carry;
+                $data = (($this->read($addrOrData) << 1) + $this->registers->p->carry) & 0x1FF;
                 $this->registers->p->carry = !!($data & 0x100);
+                $data &= 0xFF;
                 $this->registers->a = ($data & $this->registers->a) & 0xFF;
                 $this->registers->p->negative = !!($this->registers->a & 0x80);
                 $this->registers->p->zero = !($this->registers->a & 0xFF);
